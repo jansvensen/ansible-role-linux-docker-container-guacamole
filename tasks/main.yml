@@ -5,6 +5,16 @@
 #    dest: "{{ docker_container_guac_volume_dir }}/.env"
 #  register: docker_container_guac_env_result
 
+- name: Create base directory
+  ansible.builtin.file:
+    path: "{{ docker_container_guac_volume_dir }}"
+    state: directory
+
+- name: Create mysql_init directory
+  ansible.builtin.file:
+    path: "{{ docker_container_guac_volume_dir }}/mysql_init"
+    state: directory
+
 - name: docker_container guac - schema.sql
   template:
     src: templates/docker_container/guac/schema.sql.j2

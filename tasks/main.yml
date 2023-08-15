@@ -1,20 +1,4 @@
 ---
-- name: Remove container - guac
-  import_tasks: tasks/remove_docker_container.yml
-  vars:
-    docker_container_names: ["{{ docker_container_guac_name }}", "{{ docker_container_guac_d_name }}", "{{ docker_container_guac_db_name }}"]
-    docker_container_volume_dir: "{{ docker_container_guac_volume_dir }}"
-
-- name: Remove container - guac
-  import_tasks: tasks/docker_container_guac.yml
-
-- name: docker_container guac - config
-  copy:
-    src: "templates/docker_container/guac/"
-    dest: "{{ docker_container_guac_volume_dir }}/"
-    owner: root
-    group: root
-
 - name: docker_container guac - .env
   template:
     src: templates/docker_container/guac/sample.env.j2

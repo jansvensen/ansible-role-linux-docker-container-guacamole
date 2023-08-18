@@ -169,25 +169,25 @@
       - "{{ docker_container_guac_volume_dir }}/guac_conf/server.xml:/usr/local/tomcat/conf/server.xml"
       - "{{ docker_container_guac_volume_dir }}/guac_home:/guac_home"
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.guac.rule: "{{ docker_container_guac_traefik_rule }}"
-      traefik.http.routers.guac.entrypoints: http
-      traefik.http.routers.guac.middlewares: https_redirect_permanent@file
+      # traefik.enable: "true"
+      # traefik.http.routers.guac.rule: "{{ docker_container_guac_# traefik_rule }}"
+      # traefik.http.routers.guac.entrypoints: http
+      # traefik.http.routers.guac.middlewares: https_redirect_permanent@file
       # HTTPS
-      traefik.http.routers.guac_ssl.rule: "{{ docker_container_guac_traefik_rule }}"
-      traefik.http.routers.guac_ssl.entrypoints: https
-      traefik.http.routers.guac_ssl.service: guac
-      traefik.http.routers.guac_ssl.tls: "true"
-      traefik.http.routers.guac_ssl.tls.certResolver: le
-      traefik.http.routers.guac_ssl.tls.options: default
-      traefik.http.routers.guac_ssl.middlewares: guac_headers,guac_addprefix
+      # traefik.http.routers.guac_ssl.rule: "{{ docker_container_guac_# traefik_rule }}"
+      # traefik.http.routers.guac_ssl.entrypoints: https
+      # traefik.http.routers.guac_ssl.service: guac
+      # traefik.http.routers.guac_ssl.tls: "true"
+      # traefik.http.routers.guac_ssl.tls.certResolver: le
+      # traefik.http.routers.guac_ssl.tls.options: default
+      # traefik.http.routers.guac_ssl.middlewares: guac_headers,guac_addprefix
       # Auth Middleware
-      traefik.http.middlewares.guac_headers.headers.stsincludesubdomains: "true"
-      traefik.http.middlewares.guac_headers.headers.stsseconds: "315360000"
-      traefik.http.middlewares.guac_headers.headers.forcestsheader: "true"
-      traefik.http.middlewares.guac_addprefix.addprefix.prefix: "/guacamole"
+      # traefik.http.middlewares.guac_headers.headers.stsincludesubdomains: "true"
+      # traefik.http.middlewares.guac_headers.headers.stsseconds: "315360000"
+      # traefik.http.middlewares.guac_headers.headers.forcestsheader: "true"
+      # traefik.http.middlewares.guac_addprefix.addprefix.prefix: "/guacamole"
       # Service
-      traefik.http.services.guac.loadbalancer.server.port: "8080"
+      # traefik.http.services.guac.loadbalancer.server.port: "8080"
     networks_cli_compatible: yes
     network_mode: "{{ docker_container_guac_name }}_backend"
     purge_networks: yes
@@ -196,6 +196,6 @@
         links:
           - "{{ docker_container_guac_db_name }}:mysql"
           - "{{ docker_container_guac_d_name }}:guacd"
-      - name: "{{ docker_container_traefik_network_name }}"
+      #- name: "{{ docker_container_traefik_network_name }}"
     published_ports:
       - "8081:8080"

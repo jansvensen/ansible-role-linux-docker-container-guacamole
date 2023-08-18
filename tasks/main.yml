@@ -174,11 +174,11 @@
     env_file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
       GUACAMOLE_HOME: "/guac_home"
-      MYSQL_HOSTNAME: "mysql"
+      MYSQL_HOSTNAME: "{{ docker_container_guac_db_name }}"
       MYSQL_USER: '{{ guac_db_user }}'
       MYSQL_PASSWORD: '{{ guac_db_password }}'
       MYSQL_DATABASE: '{{ guac_db_name }}'
-      GUACD_HOSTNAME: "guacd"
+      GUACD_HOSTNAME: "{{ docker_container_guac_d_name }}"
       GUACD_PORT: "4822"
       MYSQL_DRIVER: mysql
       MYSQL_SSL_MODE: disabled
@@ -197,34 +197,13 @@
     volumes:
       - "{{ docker_container_guac_volume_dir }}/guac_home:/guac_home"
       - "{{ docker_container_guac_volume_dir }}/server.xml:/usr/local/tomcat/conf/server.xml"
-    labels:
-      # traefik.enable: "true"
-      # traefik.http.routers.guac.rule: "{{ docker_container_guac_# traefik_rule }}"
-      # traefik.http.routers.guac.entrypoints: http
-      # traefik.http.routers.guac.middlewares: https_redirect_permanent@file
-      # HTTPS
-      # traefik.http.routers.guac_ssl.rule: "{{ docker_container_guac_# traefik_rule }}"
-      # traefik.http.routers.guac_ssl.entrypoints: https
-      # traefik.http.routers.guac_ssl.service: guac
-      # traefik.http.routers.guac_ssl.tls: "true"
-      # traefik.http.routers.guac_ssl.tls.certResolver: le
-      # traefik.http.routers.guac_ssl.tls.options: default
-      # traefik.http.routers.guac_ssl.middlewares: guac_headers,guac_addprefix
-      # Auth Middleware
-      # traefik.http.middlewares.guac_headers.headers.stsincludesubdomains: "true"
-      # traefik.http.middlewares.guac_headers.headers.stsseconds: "315360000"
-      # traefik.http.middlewares.guac_headers.headers.forcestsheader: "true"
-      # traefik.http.middlewares.guac_addprefix.addprefix.prefix: "/guacamole"
-      # Service
-      # traefik.http.services.guac.loadbalancer.server.port: "8080"
     networks_cli_compatible: yes
     network_mode: "{{ docker_container_guac_name }}_backend"
     purge_networks: yes
     networks:
       - name: "{{ docker_container_guac_name }}_backend"
         links:
-          - "{{ docker_container_guac_db_name }}:mysql"
-          - "{{ docker_container_guac_d_name }}:guacd"
-      #- name: "{{ docker_container_traefik_network_name }}"
+          - "{{ docker_container_guac_db_name }}"
+          - "{{ docker_container_guac_d_name }}"
     published_ports:
       - "8081:8080"

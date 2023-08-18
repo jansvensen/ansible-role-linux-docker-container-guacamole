@@ -180,6 +180,8 @@
       MYSQL_DATABASE: '{{ guac_db_name }}'
       GUACD_HOSTNAME: "guacd"
       GUACD_PORT: "4822"
+      MYSQL_DRIVER: mysql
+      MYSQL_SSL_MODE: disabled
       # LDAP_HOSTNAME: "${LDAP_HOSTNAME}"
       # LDAP_PORT: "${LDAP_PORT:-389}"
       # LDAP_ENCRYPTION_METHOD: "${LDAP_ENCRYPTION_METHOD:-none}"

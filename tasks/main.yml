@@ -15,6 +15,11 @@
     path: "{{ docker_container_guac_volume_dir }}/mysql_init"
     state: directory
 
+- name: docker_container guac - server.xml
+  template:
+    src: templates/docker_container/guac/guac_conf/server.xml
+    dest: "{{ docker_container_guac_volume_dir }}/server.xml"
+
 - name: docker_container guac - schema.sql
   template:
     src: templates/docker_container/guac/schema.sql.j2

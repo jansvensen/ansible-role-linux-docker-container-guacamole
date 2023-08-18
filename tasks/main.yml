@@ -171,8 +171,8 @@
       # LDAP_USER_SEARCH_FILTER: "${LDAP_USER_SEARCH_FILTER:-(&(objectCategory=person)(objectclass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))}"
       # TOTP_ISSUER: "${FQDN_HOST_NAME:?err}"
     volumes:
-      - "{{ docker_container_guac_volume_dir }}/guac_conf/server.xml:/usr/local/tomcat/conf/server.xml"
       - "{{ docker_container_guac_volume_dir }}/guac_home:/guac_home"
+      - "{{ docker_container_guac_volume_dir }}/guac_conf/server.xml:/usr/local/tomcat/conf/server.xml"
     labels:
       # traefik.enable: "true"
       # traefik.http.routers.guac.rule: "{{ docker_container_guac_# traefik_rule }}"

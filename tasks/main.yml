@@ -118,6 +118,8 @@
       MYSQL_USER: '{{ guac_db_user }}'
       MYSQL_PASSWORD: '{{ guac_db_password }}'
       MYSQL_DATABASE: '{{ guac_db_name }}'
+      MYSQL_DRIVER: mysql
+      MYSQL_SSL_MODE: disabled
     volumes:
       - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
       - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"

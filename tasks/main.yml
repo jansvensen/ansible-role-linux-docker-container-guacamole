@@ -5,6 +5,26 @@
 #    dest: "{{ docker_container_guac_volume_dir }}/.env"
 #  register: docker_container_guac_env_result
 
+- name: remove_docker_container - remove containers
+  docker_container:
+    name: "{{ item }}"
+    state: absent
+    container_default_behavior: no_defaults
+  with_items: "{{ docker_container_names }}"
+
+- name: remove_docker_container - remove network
+  docker_network:
+    name: "{{ item }}_backend"
+    force: yes
+    state: absent
+  with_items: "{{ docker_container_names }}"
+
+- name: remove_docker_container - remove files
+  file:
+    path: "{{ docker_container_volume_dir }}"
+    state: absent
+  when: docker_container_volume_dir is defined
+
 - name: Create base directory
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}"

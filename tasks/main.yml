@@ -172,7 +172,7 @@
       # TOTP_ISSUER: "${FQDN_HOST_NAME:?err}"
     volumes:
       - "{{ docker_container_guac_volume_dir }}/guac_home:/guac_home"
-      - "{{ docker_container_guac_volume_dir }}/guac_conf/server.xml:/usr/local/tomcat/conf/server.xml"
+      - "{{ docker_container_guac_volume_dir }}/server.xml:/usr/local/tomcat/conf/server.xml"
     labels:
       # traefik.enable: "true"
       # traefik.http.routers.guac.rule: "{{ docker_container_guac_# traefik_rule }}"

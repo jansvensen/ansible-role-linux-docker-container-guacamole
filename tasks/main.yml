@@ -118,41 +118,6 @@
     networks:
       - name: "{{ docker_container_guac_name }}_backend"
 
-
-- name: docker_container guac-db
-  docker_container:
-    name: "{{ docker_container_guac_db_name }}"
-    image: "{{ docker_container_guac_db_image }}"
-    state: started
-    #recreate: "{{ docker_container_guac_recreate | default('no') }}"
-    #restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
-    restart_policy: always
-    container_default_behavior: no_defaults
-    auto_remove: no
-    detach: yes
-    init: no
-    interactive: no
-    memory: "0"
-    paused: no
-    privileged: no
-    read_only: no
-    tty: no
-    env_file: "{{ docker_container_guac_volume_dir }}/.env"
-    env:
-      MYSQL_ROOT_PASSWORD: '{{ guac_db_password }}'
-      MYSQL_USER: '{{ guac_db_user }}'
-      MYSQL_PASSWORD: '{{ guac_db_password }}'
-      MYSQL_DATABASE: '{{ guac_db_name }}'
-    volumes:
-      - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
-      - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"
-    networks_cli_compatible: yes
-    network_mode: "{{ docker_container_guac_name }}_backend"
-    purge_networks: yes
-    networks:
-      - name: "{{ docker_container_guac_name }}_backend"
-
-
 - name: docker_container guacamole
   docker_container:
     name: "{{ docker_container_guac_name }}"
@@ -206,3 +171,35 @@
     published_ports:
       - "8081:8080"
 
+- name: docker_container guac-db
+  docker_container:
+    name: "{{ docker_container_guac_db_name }}"
+    image: "{{ docker_container_guac_db_image }}"
+    state: started
+    #recreate: "{{ docker_container_guac_recreate | default('no') }}"
+    #restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
+    restart_policy: always
+    container_default_behavior: no_defaults
+    auto_remove: no
+    detach: yes
+    init: no
+    interactive: no
+    memory: "0"
+    paused: no
+    privileged: no
+    read_only: no
+    tty: no
+    env_file: "{{ docker_container_guac_volume_dir }}/.env"
+    env:
+      MYSQL_ROOT_PASSWORD: '{{ guac_db_password }}'
+      MYSQL_USER: '{{ guac_db_user }}'
+      MYSQL_PASSWORD: '{{ guac_db_password }}'
+      MYSQL_DATABASE: '{{ guac_db_name }}'
+    volumes:
+      - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
+      - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"
+    networks_cli_compatible: yes
+    network_mode: "{{ docker_container_guac_name }}_backend"
+    purge_networks: yes
+    networks:
+      - name: "{{ docker_container_guac_name }}_backend"

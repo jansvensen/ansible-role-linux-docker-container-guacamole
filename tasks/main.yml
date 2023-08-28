@@ -1,7 +1,12 @@
 ---
-- name: Create base directory
+- name: Create guac directory
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}"
+    state: directory
+
+- name: Create guac-db directory
+  ansible.builtin.file:
+    path: "{{ docker_container_guac_db_volume_dir }}"
     state: directory
 
 - name: Create mysql_init directory

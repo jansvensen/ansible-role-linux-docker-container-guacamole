@@ -28,9 +28,14 @@
   with_items: "{{ docker_container_names }}"
 
 # Cleanup Docker containers
-- name: Cleanup Docker containers
-  shell: |
-    if[docker ps -a -f status=exited -q] then docker rm $(docker ps -a -f status=exited -q) fi
+- name: Check for containers that actually exist
+  shell: 'docker ps -aq'
+  register: found_containers
+
+- name: Remove the containers found by the above command
+  shell: 'docker stop {{ item.item }} && docker rm -fv {{ item.item }}'
+  with_items: '{{ found_containers.results }}'
+  when: item.stdout
 
 - name: Remove Docker networks
   docker_network:

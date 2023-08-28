@@ -27,6 +27,11 @@
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
 
+# Cleanup Docker containers
+- name: Cleanup Docker containers
+  shell: |
+    docker rm $(docker ps -a -f status=exited -q)
+    
 - name: Remove Docker networks
   docker_network:
     name: "{{ item }}_backend"

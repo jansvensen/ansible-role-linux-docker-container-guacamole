@@ -191,10 +191,10 @@
     tty: no
     env_file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
-      MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT_PASSWORD }}"
-      MYSQL_USER: "{{ MYSQL_USER }}"
-      MYSQL_PASSWORD: "{{ MYSQL_PASSWORD }}"
-      MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
+      MYSQL_ROOT_PASSWORD: "{{ guac_db_password }}"
+      MYSQL_USER: "{{ guac_db_user }}"
+      MYSQL_PASSWORD: "{{ guac_db_password }}"
+      MYSQL_DATABASE: "{{ guac_db_name }}"
     volumes:
       - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
       - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"

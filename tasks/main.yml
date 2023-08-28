@@ -202,4 +202,4 @@
     network_mode: "{{ docker_container_guac_name }}_backend"
     purge_networks: yes
     networks:
-      - name: "{{ docker_container_guac_name }}_backend"
+      - name: "{{ docker_container_guac_name }}_backendaaaa"

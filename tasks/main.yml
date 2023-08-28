@@ -27,16 +27,6 @@
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
 
-# Cleanup Docker containers
-- name: Check for containers that actually exist
-  shell: 'docker ps -aq'
-  register: found_containers
-
-- name: Remove the containers found by the above command
-  shell: 'docker stop {{ item.item }} && docker rm -fv {{ item.item }}'
-  with_items: '{{ found_containers.results }}'
-  when: found_containers is defined
-
 - name: Remove Docker networks
   docker_network:
     name: "{{ item }}_backend"

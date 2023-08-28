@@ -35,7 +35,7 @@
 - name: Remove the containers found by the above command
   shell: 'docker stop {{ item.item }} && docker rm -fv {{ item.item }}'
   with_items: '{{ found_containers.results }}'
-  when: item.stdout is defined
+  when: found_containers is defined
 
 - name: Remove Docker networks
   docker_network:

@@ -22,6 +22,16 @@
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
 
+- name: Stop running containers
+  docker_container:
+    name: "{{ item }}"
+    state: stopped
+  with_items: "{{ docker_container_names }}"
+
+- name: Remove Stopped docker containers
+  shell: |
+     docker rm $(docker ps -a -q);
+
 - name: remove_docker_container - remove network
   docker_network:
     name: "{{ item }}_backend"

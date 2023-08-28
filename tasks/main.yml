@@ -176,8 +176,8 @@
     name: "{{ docker_container_guac_db_name }}"
     image: "{{ docker_container_guac_db_image }}"
     state: started
-    #recreate: "{{ docker_container_guac_recreate | default('no') }}"
-    #restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
+    # recreate: "{{ docker_container_guac_recreate | default('no') }}"
+    # restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
     restart_policy: always
     container_default_behavior: no_defaults
     auto_remove: no
@@ -191,10 +191,10 @@
     tty: no
     env_file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
-      MYSQL_ROOT_PASSWORD: '{{ guac_db_password }}'
-      MYSQL_USER: '{{ guac_db_user }}'
-      MYSQL_PASSWORD: '{{ guac_db_password }}'
-      MYSQL_DATABASE: '{{ guac_db_name }}'
+      MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT_PASSWORD }}"
+      MYSQL_USER: "{{ MYSQL_USER }}"
+      MYSQL_PASSWORD: "{{ MYSQL_PASSWORD }}"
+      MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
     volumes:
       - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
       - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"

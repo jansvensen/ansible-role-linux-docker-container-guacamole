@@ -182,6 +182,8 @@
       GUACD_PORT: "4822"
       MYSQL_DRIVER: mysql
       MYSQL_SSL_MODE: disabled
+      useSSL: false
+      allowPublicKeyRetrieval: true
       # LDAP_HOSTNAME: "${LDAP_HOSTNAME}"
       # LDAP_PORT: "${LDAP_PORT:-389}"
       # LDAP_ENCRYPTION_METHOD: "${LDAP_ENCRYPTION_METHOD:-none}"

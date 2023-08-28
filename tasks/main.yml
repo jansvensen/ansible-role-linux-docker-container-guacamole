@@ -42,7 +42,7 @@
 
 - name: Copy sql connection config file
   template:
-    src: templates/docker_container/guac_db/my.cnf
+    src: templates/docker_container/guac-db/my.cnf
     dest: "{{ docker_container_guac_db_volume_dir }}/my.cnf"
 
 - name: Copy server.xml

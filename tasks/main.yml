@@ -137,7 +137,7 @@
     privileged: no
     read_only: no
     tty: no
-    env_ansible.builtin.file: "{{ docker_container_guac_volume_dir }}/.env"
+    env_file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
       MYSQL_ROOT_PASSWORD: '{{ guac_db_password }}'
       MYSQL_USER: '{{ guac_db_user }}'
@@ -171,7 +171,7 @@
     privileged: no
     read_only: no
     tty: no
-    env_ansible.builtin.file: "{{ docker_container_guac_volume_dir }}/.env"
+    env_file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
       GUACAMOLE_HOME: "/guac_home"
       MYSQL_HOSTNAME: "{{ docker_container_guac_db_name }}"

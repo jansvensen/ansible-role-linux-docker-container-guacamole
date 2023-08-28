@@ -35,6 +35,11 @@
     state: absent
   when: docker_container_volume_dir is defined
 
+- name: Copy sql connection config file
+  template:
+    src: templates/docker_container/guac_db/my.cnf
+    dest: "{{ docker_container_guac_volume_dir }}/my.cnf"
+
 - name: Copy server.xml
   template:
     src: templates/docker_container/guac/guac_conf/server.xml

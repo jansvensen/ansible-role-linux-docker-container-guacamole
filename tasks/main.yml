@@ -202,7 +202,7 @@
       MYSQL_DATABASE: "{{ guac_db_name }}"
     volumes:
       - "{{ docker_container_guac_volume_dir }}/mysql:/var/lib/mysql"
-      - "{{ docker_container_guac_volume_dir }}/mysql:/tmp/malsehen"
+      - "{{ docker_container_guac_db_volume_dir }}:/tmp/malsehen"
       - "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro"
     networks_cli_compatible: yes
     network_mode: "{{ docker_container_guac_name }}_backend"

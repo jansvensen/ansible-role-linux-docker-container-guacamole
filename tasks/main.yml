@@ -16,9 +16,9 @@
 #  register: docker_container_guac_env_result
 
 - name: docker_container guac - .env
-  ansible.builtin.file:
+  ansible.builtin.copy:
     src: templates/docker_container/guac/.env
-    dest: "{{ docker_container_guac_volume_dir }}"
+    dest: "{{ docker_container_guac_volume_dir }}/.env"
   register: docker_container_guac_env_result
 
 - name: remove_docker_container - remove containers

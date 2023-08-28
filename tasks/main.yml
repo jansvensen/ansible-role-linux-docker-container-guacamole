@@ -76,7 +76,7 @@
   register: docker_container_guac_mfa_file_exists_result
 
 - name: docker_container guac - remove auth-totp extenstions file
-  file:
+  ansible.builtin.file:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     state: absent
     register: docker_container_guac_mfa_file

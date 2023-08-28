@@ -30,7 +30,7 @@
   with_items: "{{ docker_container_names }}"
 
 - name: remove_docker_container - remove files
-  file:
+  ansible.builtin.file:
     path: "{{ docker_container_volume_dir }}"
     state: absent
   when: docker_container_volume_dir is defined
@@ -46,7 +46,7 @@
     dest: "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql"
 
 - name: docker_container guac - auth-totp extenstions directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}/guac_home/extensions"
     state: directory
   tags: docker_container_guac_mfa
@@ -137,7 +137,7 @@
     privileged: no
     read_only: no
     tty: no
-    env_file: "{{ docker_container_guac_volume_dir }}/.env"
+    env_ansible.builtin.file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
       MYSQL_ROOT_PASSWORD: '{{ guac_db_password }}'
       MYSQL_USER: '{{ guac_db_user }}'
@@ -171,7 +171,7 @@
     privileged: no
     read_only: no
     tty: no
-    env_file: "{{ docker_container_guac_volume_dir }}/.env"
+    env_ansible.builtin.file: "{{ docker_container_guac_volume_dir }}/.env"
     env:
       GUACAMOLE_HOME: "/guac_home"
       MYSQL_HOSTNAME: "{{ docker_container_guac_db_name }}"

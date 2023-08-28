@@ -9,60 +9,54 @@
     path: "{{ docker_container_guac_volume_dir }}/mysql_init"
     state: directory
 
-- name: docker_container guac - .env
+- name: Generate .env file from template
   ansible.builtin.template:
     src: templates/docker_container/guac/sample.env.j2
     dest: "{{ docker_container_guac_volume_dir }}/.env"
   register: docker_container_guac_env_result
 
-- name: remove_docker_container - remove containers
+- name: Stop existing containers
   docker_container:
     name: "{{ item }}"
     state: absent
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
 
-- name: Stop running containers
-  docker_container:
-    name: "{{ item }}"
-    state: stopped
-  with_items: "{{ docker_container_names }}"
-
-- name: Remove Stopped docker containers
+- name: Remove Stopped Docker containers
   shell: |
      docker rm $(docker ps -a -q);
 
-- name: remove_docker_container - remove network
+- name: Remove Docker networks
   docker_network:
     name: "{{ item }}_backend"
     force: yes
     state: absent
   with_items: "{{ docker_container_names }}"
 
-- name: remove_docker_container - remove files
+- name: Remove Docker files
   ansible.builtin.file:
     path: "{{ docker_container_volume_dir }}"
     state: absent
   when: docker_container_volume_dir is defined
 
-- name: docker_container guac - server.xml
+- name: Copy server.xml
   template:
     src: templates/docker_container/guac/guac_conf/server.xml
     dest: "{{ docker_container_guac_volume_dir }}/server.xml"
 
-- name: docker_container guac - schema.sql
+- name: Copy schema.sql
   template:
     src: templates/docker_container/guac/schema.sql.j2
     dest: "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql"
 
-- name: docker_container guac - auth-totp extenstions directory
+- name: GUAC - create auth-totp extenstions directory
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}/guac_home/extensions"
     state: directory
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
-- name: docker_container guac - download auth-totp
+- name: GUAC - download auth-totp
   unarchive:
     src: 'https://apache.org/dyn/closer.lua/guacamole/{{ docker_container_guac_version }}/binary/guacamole-auth-totp-{{ docker_container_guac_version }}.tar.gz?action=download'
     dest: '{{ docker_container_guac_volume_dir }}'
@@ -71,7 +65,7 @@
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
-- name: docker_container guac - copy auth-totp to extension directory
+- name: GUAC - copy auth-totp to extension directory
   copy:
     src: '{{ docker_container_guac_volume_dir }}/guacamole-auth-totp-{{ docker_container_guac_version }}/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     dest: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
@@ -80,12 +74,12 @@
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
-- name: docker_container guac - check if auth-totp extenstions file exists
+- name: GUAC - check if auth-totp extenstions file exists
   ansible.builtin.stat:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
   register: docker_container_guac_mfa_file_exists_result
 
-- name: docker_container guac - remove auth-totp extenstions file
+- name: GUAC - remove auth-totp extenstions file
   ansible.builtin.file:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     state: absent
@@ -95,7 +89,7 @@
     - guac_mfa_enabled == false
     - docker_container_guac_mfa_file_exists_result.stat.exists
 
-- name: docker_container guac - backend net
+- name: GUAC - backend net
   docker_network:
     name: "{{ docker_container_guac_name }}_backend"
     driver: bridge
@@ -104,7 +98,7 @@
     internal: no
     state: present
 
-- name: docker_container guacd
+- name: Create Docker container guacd
   docker_container:
     name: "{{ docker_container_guac_d_name }}"
     image: "{{ docker_container_guac_d_image }}"
@@ -128,7 +122,7 @@
     networks:
       - name: "{{ docker_container_guac_name }}_backend"
 
-- name: docker_container guacamole
+- name: Create Docker container guacamole
   docker_container:
     name: "{{ docker_container_guac_name }}"
     image: "{{ docker_container_guac_image }}"
@@ -181,7 +175,7 @@
     published_ports:
       - "8081:8080"
 
-- name: docker_container guac-db
+- name: Create Docker container guac-db
   docker_container:
     name: "{{ docker_container_guac_db_name }}"
     image: "{{ docker_container_guac_db_image }}"

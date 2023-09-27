@@ -59,7 +59,6 @@
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}/guac_home/extensions"
     state: directory
-  tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
 - name: GUAC - download auth-totp
@@ -68,7 +67,6 @@
     dest: '{{ docker_container_guac_volume_dir }}'
     creates: '{{ docker_container_guac_volume_dir }}/guacamole-auth-totp-{{ docker_container_guac_version }}/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     remote_src: yes
-  tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
 - name: GUAC - copy auth-totp to extension directory
@@ -77,23 +75,51 @@
     dest: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     remote_src: yes
   register: docker_container_guac_mfa_result
-  tags: docker_container_guac_mfa
   when: guac_mfa_enabled
 
-- name: GUAC - check if auth-totp extenstions file exists
+- name: GUAC - check if auth-totp extenstion file exists
   ansible.builtin.stat:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
-  register: docker_container_guac_mfa_file_exists_result
+  register: docker_container_guac_totp_file_exists_result
 
-- name: GUAC - remove auth-totp extenstions file
+- name: GUAC - remove auth-totp extenstion file
   ansible.builtin.file:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
     state: absent
-  register: docker_container_guac_mfa_file
-  tags: docker_container_guac_mfa
+  register: docker_container_guac_totp_file
   when:
     - guac_mfa_enabled == false
-    - docker_container_guac_mfa_file_exists_result.stat.exists
+    - docker_container_guac_totp_file_exists_result.stat.exists
+
+- name: GUAC - download auth-ldap
+  unarchive:
+    src: 'https://apache.org/dyn/closer.lua/guacamole/{{ docker_container_guac_version }}/binary/guacamole-auth-ldap-{{ docker_container_guac_version }}.tar.gz?action=download'
+    dest: '{{ docker_container_guac_volume_dir }}'
+    creates: '{{ docker_container_guac_volume_dir }}/guacamole-auth-ldap-{{ docker_container_guac_version }}/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+    remote_src: yes
+  when: guac_ldap_enabled
+
+- name: GUAC - copy auth-ldap to extension directory
+  copy:
+    src: '{{ docker_container_guac_volume_dir }}/guacamole-auth-ldap-{{ docker_container_guac_version }}/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+    dest: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+    remote_src: yes
+  register: docker_container_guac_mfa_result
+  when: guac_mfa_enabled
+
+- name: GUAC - check if auth-ldap extenstion file exists
+  ansible.builtin.stat:
+    path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+  register: docker_container_guac_ldap_file_exists_result
+
+- name: GUAC - remove auth-ldap extenstion file
+  ansible.builtin.file:
+    path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+    state: absent
+  register: docker_container_guac_ldap_file
+  when:
+    - guac_mfa_enabled == false
+    - docker_container_guac_ldap_file_exists_result.stat.exists
 
 - name: GUAC - backend net
   docker_network:
@@ -109,8 +135,6 @@
     name: "{{ docker_container_guac_d_name }}"
     image: "{{ docker_container_guac_d_image }}"
     state: started
-    #recreate: "{{ docker_container_guac_recreate | default('no') }}"
-    #restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
     restart_policy: always
     container_default_behavior: no_defaults
     auto_remove: no
@@ -133,8 +157,6 @@
     name: "{{ docker_container_guac_name }}"
     image: "{{ docker_container_guac_image }}"
     state: started
-    #recreate: "{{ docker_container_guac_recreate | default('no') }}"
-    #restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
     restart_policy: always
     container_default_behavior: no_defaults
     auto_remove: no
@@ -186,8 +208,6 @@
     name: "{{ docker_container_guac_db_name }}"
     image: "{{ docker_container_guac_db_image }}"
     state: started
-    # recreate: "{{ docker_container_guac_recreate | default('no') }}"
-    # restart: "{{ (docker_container_guac_env_result.changed or (docker_container_guac_mfa_result is defined and docker_container_guac_mfa_result.changed) or (docker_container_guac_mfa_file is defined and docker_container_guac_mfa_file.changed)) | ternary('yes', 'no') }}"
     restart_policy: always
     container_default_behavior: no_defaults
     auto_remove: no

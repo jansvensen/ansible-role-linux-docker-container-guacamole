@@ -112,6 +112,20 @@
   register: docker_container_guac_mfa_result
   when: guac_ldap_enabled
 
+- name: GUAC - check if auth-ldap extenstion file exists
+  ansible.builtin.stat:
+    path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+  register: docker_container_guac_ldap_file_exists_result
+
+- name: GUAC - remove auth-ldap extenstion file
+  ansible.builtin.file:
+    path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
+    state: absent
+  register: docker_container_guac_ldap_file
+  when:
+    - guac_ldap_enabled == false
+    - docker_container_guac_ldap_file_exists_result.stat.exists
+
 - name: GUAC - backend net
   docker_network:
     name: '{{ docker_container_guac_name }}_backend'

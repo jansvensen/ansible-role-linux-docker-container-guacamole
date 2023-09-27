@@ -14,6 +14,11 @@
     path: "{{ docker_container_guac_volume_dir }}/mysql_init"
     state: directory
 
+- name: Create extensions directory
+  ansible.builtin.file:
+    path: "{{ docker_container_guac_extensions_volume_dir }}"
+    state: directory
+
 - name: Generate .env file from template
   ansible.builtin.template:
     src: templates/docker_container/guac/sample.env.j2

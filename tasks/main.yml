@@ -105,7 +105,7 @@
     dest: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-ldap-{{ docker_container_guac_version }}.jar'
     remote_src: yes
   register: docker_container_guac_mfa_result
-  when: guac_mfa_enabled
+  when: guac_ldap_enabled
 
 - name: GUAC - check if auth-ldap extenstion file exists
   ansible.builtin.stat:
@@ -118,7 +118,7 @@
     state: absent
   register: docker_container_guac_ldap_file
   when:
-    - guac_mfa_enabled == false
+    - guac_ldap_enabled == false
     - docker_container_guac_ldap_file_exists_result.stat.exists
 
 - name: GUAC - backend net

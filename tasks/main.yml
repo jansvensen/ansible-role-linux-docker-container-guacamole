@@ -1,6 +1,7 @@
 ---
 - name: Create guac directory
   ansible.builtin.file:
+    become: yes
     path: '{{ docker_container_guac_volume_dir }}'
     state: directory
 

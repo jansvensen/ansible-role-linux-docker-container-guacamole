@@ -1,19 +1,4 @@
 ---
-- debug:
-    msg: 'Output: {{ docker_host_subnet_base }}'
-
-- debug:
-    msg: 'Output: {{ docker_host_subnet_size }}'
-
-- debug:
-    msg: 'Output: {{ docker_host_bridge_ip }}'
-
-- debug:
-    msg: 'Output: {{ docker_container_volume_base_dir }}'
-
-- debug:
-    msg: 'Output: {{ docker_container_guac_volume_dir }}'
-
 - name: Create guac directory
   ansible.builtin.file:
     path: '{{ docker_container_guac_volume_dir }}'

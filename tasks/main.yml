@@ -3,6 +3,7 @@
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}"
     state: directory
+  become: yes
 
 - name: Create guac-db directory
   ansible.builtin.file:
@@ -26,7 +27,7 @@
     state: absent
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
-
+ 
 - name: Remove Docker networks
   docker_network:
     name: "{{ item }}_backend"

@@ -1,9 +1,4 @@
 ---
-- name: Install prerequisties
-  ansible.builtin.script:
-    cmd: pip install docker docker-py
-  become: yes
-
 - name: Create guac directory
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}"
@@ -53,7 +48,7 @@
     src: templates/docker_container/guac-db/my.cnf
     dest: "{{ docker_container_guac_db_volume_dir }}/my.cnf"
   become: yes
-  
+
 - name: Copy server.xml
   template:
     src: templates/docker_container/guac/guac_conf/server.xml

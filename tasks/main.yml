@@ -1,7 +1,7 @@
 ---
 - name: Install prerequisties
   ansible.builtin.script:
-    cmd: apt -y install pip
+    cmd: apt-get -y install pip
   become: yes
 
 - name: Install prerequisties

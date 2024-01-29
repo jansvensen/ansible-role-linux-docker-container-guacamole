@@ -22,6 +22,7 @@
     src: templates/docker_container/guac/sample.env.j2
     dest: "{{ docker_container_guac_volume_dir }}/.env"
   register: docker_container_guac_env_result
+  become: yes
 
 - name: Stop existing containers
   docker_container:

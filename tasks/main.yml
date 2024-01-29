@@ -34,7 +34,6 @@
     state: absent
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
-  become: yes
  
 - name: Remove Docker networks
   docker_network:
@@ -42,21 +41,19 @@
     force: yes
     state: absent
   with_items: "{{ docker_container_names }}"
-  become: yes
 
 - name: Remove Docker files
   ansible.builtin.file:
     path: "{{ docker_container_volume_dir }}"
     state: absent
   when: docker_container_volume_dir is defined
-  become: yes
 
 - name: Copy sql connection config file
   template:
     src: templates/docker_container/guac-db/my.cnf
     dest: "{{ docker_container_guac_db_volume_dir }}/my.cnf"
   become: yes
-
+  
 - name: Copy server.xml
   template:
     src: templates/docker_container/guac/guac_conf/server.xml

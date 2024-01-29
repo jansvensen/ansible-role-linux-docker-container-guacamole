@@ -22,6 +22,7 @@
     src: templates/docker_container/guac/sample.env.j2
     dest: "{{ docker_container_guac_volume_dir }}/.env"
   register: docker_container_guac_env_result
+  become: yes
 
 - name: Stop existing containers
   docker_container:
@@ -29,6 +30,7 @@
     state: absent
     container_default_behavior: no_defaults
   with_items: "{{ docker_container_names }}"
+  become: yes
  
 - name: Remove Docker networks
   docker_network:
@@ -36,27 +38,32 @@
     force: yes
     state: absent
   with_items: "{{ docker_container_names }}"
+  become: yes
 
 - name: Remove Docker files
   ansible.builtin.file:
     path: "{{ docker_container_volume_dir }}"
     state: absent
   when: docker_container_volume_dir is defined
+  become: yes
 
 - name: Copy sql connection config file
   template:
     src: templates/docker_container/guac-db/my.cnf
     dest: "{{ docker_container_guac_db_volume_dir }}/my.cnf"
+  become: yes
 
 - name: Copy server.xml
   template:
     src: templates/docker_container/guac/guac_conf/server.xml
     dest: "{{ docker_container_guac_volume_dir }}/server.xml"
+  become: yes
 
 - name: Copy schema.sql
   template:
     src: templates/docker_container/guac/schema.sql.j2
     dest: "{{ docker_container_guac_volume_dir }}/mysql_init/schema.sql"
+  become: yes
 
 - name: GUAC - create auth-totp extenstions directory
   ansible.builtin.file:

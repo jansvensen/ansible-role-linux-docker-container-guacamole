@@ -9,11 +9,13 @@
   ansible.builtin.file:
     path: "{{ docker_container_guac_db_volume_dir }}"
     state: directory
+  become: yes
 
 - name: Create mysql_init directory
   ansible.builtin.file:
     path: "{{ docker_container_guac_volume_dir }}/mysql_init"
     state: directory
+  become: yes
 
 - name: Generate .env file from template
   ansible.builtin.template:

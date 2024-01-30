@@ -81,6 +81,7 @@
     remote_src: yes
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
+  become: yes
 
 - name: GUAC - copy auth-totp to extension directory
   copy:
@@ -90,11 +91,13 @@
   register: docker_container_guac_mfa_result
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
+  become: yes
 
 - name: GUAC - check if auth-totp extenstions file exists
   ansible.builtin.stat:
     path: '{{ docker_container_guac_volume_dir }}/guac_home/extensions/guacamole-auth-totp-{{ docker_container_guac_version }}.jar'
   register: docker_container_guac_mfa_file_exists_result
+  become: yes
 
 - name: GUAC - remove auth-totp extenstions file
   ansible.builtin.file:
@@ -105,6 +108,7 @@
   when:
     - guac_mfa_enabled == false
     - docker_container_guac_mfa_file_exists_result.stat.exists
+  become: yes
 
 - name: GUAC - backend net
   docker_network:

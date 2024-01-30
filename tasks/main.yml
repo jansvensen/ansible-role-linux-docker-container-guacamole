@@ -71,6 +71,7 @@
     state: directory
   tags: docker_container_guac_mfa
   when: guac_mfa_enabled
+  become: yes
 
 - name: GUAC - download auth-totp
   unarchive:

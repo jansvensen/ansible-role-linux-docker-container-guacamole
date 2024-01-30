@@ -113,6 +113,7 @@
     enable_ipv6: no
     internal: no
     state: present
+  become: yes
 
 - name: Create Docker container guacd
   docker_container:
@@ -137,6 +138,7 @@
     purge_networks: yes
     networks:
       - name: "{{ docker_container_guac_name }}_backend"
+  become: yes
 
 - name: Create Docker container guacamole
   docker_container:
@@ -190,6 +192,7 @@
           - "{{ docker_container_guac_d_name }}"
     published_ports:
       - "8081:8080"
+  become: yes
 
 - name: Create Docker container guac-db
   docker_container:
@@ -224,3 +227,4 @@
     purge_networks: yes
     networks:
       - name: "{{ docker_container_guac_name }}_backend"
+  become: yes
